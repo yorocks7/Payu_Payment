@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Component, React } from "react/cjs/react.production.min";
 
 class Payment extends Component {
@@ -14,7 +15,7 @@ class Payment extends Component {
     hash: '14caa92ef253769f4278f3a594f55aa844ea9c810c8e49d5102f1ffbf0b53ae4db982610fbc6a0927e3175ace71321b8dd9020b64fd9c70e83f21a2904087d37'
   }
 
-  onPay = () => {
+  onPay = async () => {
     const body = {
       ...this.state,
     }
@@ -29,19 +30,37 @@ class Payment extends Component {
     console.log(body);
     console.log(formBody);
 
-    var xhr = new XMLHttpRequest();
+    // var xhr = new XMLHttpRequest();
     const url = 'https://test.payu.in/_payment';
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // xhr.send(JSON.stringify({
-    //   body
-    // }));
-    xhr.send(formBody);
-    xhr.onload = () => {
-      console.log(this.responseText);
-      var data = JSON.parse(this.responseText);
-      console.log(data);
+    const data = JSON.stringify(body);
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Credentials' : true,
+      'X-Frame-Options' : "ALLOW-FROM https://www.payumoney.com/citruspage/",
+      'Authorization' : 'rrXiAb3h5u/1+vE7N4CJ86NBd84kGgI+0GrLdXONYWg=',
+    };
+    
+    try{
+      const response = await axios({method: "POST", url, formBody, headers});
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      return;
     }
+
+
+    // xhr.open('POST', url, true);
+    // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // // xhr.send(JSON.stringify({
+    // //   body
+    // // }));
+    // xhr.send(formBody);
+    // xhr.onload = () => {
+    //   console.log(this.responseText);
+    //   var data = JSON.parse(this.responseText);
+    //   console.log(data);
+    // }
   }
 
   render () {
